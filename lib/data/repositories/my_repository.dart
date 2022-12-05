@@ -1,7 +1,8 @@
 
-import 'package:provider/data/api_service/api_service.dart';
-import 'package:provider/data/local_db/local_db.dart';
-import 'package:provider/data/models/user_data.dart';
+
+import 'package:provider_part_one/data/api_service/api_service.dart';
+import 'package:provider_part_one/data/local_db/local_db.dart';
+import 'package:provider_part_one/data/models/user_data.dart';
 
 class MyRepository {
   MyRepository({

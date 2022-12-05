@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/data/api_service/Service.dart';
-import 'package:provider/data/local_db/local_db.dart';
-import 'package:provider/data/repositories/My_repository_card.dart';
-import 'package:provider/ui/Card_info_screen.dart';
-import 'package:provider/view_model/bella_view_model.dart';
+import 'package:provider_part_one/data/api_service/Service.dart';
+import 'package:provider_part_one/data/local_db/local_db.dart';
+import 'package:provider_part_one/data/repositories/My_repository_card.dart';
+import 'package:provider_part_one/ui/Card_info_screen.dart';
+import 'package:provider_part_one/view_model/bella_view_model.dart';
+import 'package:provider/provider.dart';
+
 
 
 void main() {

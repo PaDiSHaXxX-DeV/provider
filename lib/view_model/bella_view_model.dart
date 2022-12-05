@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:provider/data/models/Card_model.dart';
-import 'package:provider/data/repositories/My_repository_card.dart';
+import 'package:provider_part_one/data/models/Card_model.dart';
+import 'package:provider_part_one/data/repositories/My_repository_card.dart';
 
 class CardViewModel extends ChangeNotifier {
   CardViewModel({required MyRepository_card myRepository}) {

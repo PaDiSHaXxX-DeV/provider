@@ -1,7 +1,7 @@
 
-import 'package:provider/data/api_service/Service.dart';
-import 'package:provider/data/local_db/local_db.dart';
-import 'package:provider/data/models/Card_model.dart';
+import 'package:provider_part_one/data/api_service/Service.dart';
+import 'package:provider_part_one/data/local_db/local_db.dart';
+import 'package:provider_part_one/data/models/Card_model.dart';
 
 class MyRepository_card {
   MyRepository_card({

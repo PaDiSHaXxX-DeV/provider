@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as https;
 import 'package:http/http.dart';
-import 'package:provider/data/models/user_data.dart';
+import 'package:provider_part_one/data/models/user_data.dart';
 
 class ApiService {
   Future<UserData> getUserData() async {

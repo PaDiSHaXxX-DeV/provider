@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/view_model/bella_view_model.dart';
+import 'package:provider_part_one/view_model/bella_view_model.dart';
+import 'package:provider/provider.dart';
+
 
 class CardInfoScreen extends StatelessWidget {
   const CardInfoScreen({Key? key}) : super(key: key);

@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:provider_part_one/data/api_service/Service.dart';
-import 'package:provider_part_one/data/local_db/local_db.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider_part_one/cubit/album_cubit.dart';
+import 'package:provider_part_one/data/api_service/api_service.dart';
 import 'package:provider_part_one/data/repositories/My_repository_card.dart';
 import 'package:provider_part_one/ui/Card_info_screen.dart';
-import 'package:provider_part_one/view_model/bella_view_model.dart';
-import 'package:provider/provider.dart';
-
-
 
 void main() {
-  MyRepository_card myRepository_card = MyRepository_card(apiService: ApiService_card(), localDatabase: LocalDatabase(),);
-  CardViewModel cardViewModel = CardViewModel(myRepository: myRepository_card);
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => cardViewModel),
-      ],
-      child: MyApp(),
-    ),
-  );
+  runApp(MultiBlocProvider(
+    providers: [
+      BlocProvider(
+          create: (contex) => CardCubit(Cards_Repo(apiService: ApiService())))
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -27,11 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const CardInfoScreen());
+        home: const UsersCardsPage());
   }
 }

@@ -1,25 +1,40 @@
-import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as https;
-import 'package:http/http.dart';
-import 'package:provider_part_one/data/models/user_data.dart';
+import 'package:dio/dio.dart';
+import 'package:provider_part_one/data/models/Card_model.dart';
+import 'package:provider_part_one/data/my_response/my_response.dart';
 
-class ApiService {
-  Future<UserData> getUserData() async {
+import 'api_client.dart';
+
+class ApiService extends ApiClient {
+  Future<MyResponse> getSingleCardById(int id) async {
+    // Dio dio = Dio();
+    MyResponse myResponse = MyResponse(error: "");
     try {
-      Response response =
-          await https.get(Uri.parse("https://api.agify.io/?name=bella"));
+      Response response = await dio.get("${dio.options.baseUrl}/albums/$id");
       if (response.statusCode == 200) {
-        UserData userData = UserData.fromJson(jsonDecode(response.body));
-        debugPrint(userData.name);
-        return userData;
-      } else {
-        throw Exception();
+        myResponse.data = UsersCardsModel.fromJson(response.data);
       }
-    } catch (e) {
-      print(e.toString());
-      throw Exception(e);
+    } catch (err) {
+      myResponse.error = err.toString();
+      //print(err.toString());
     }
+
+    return myResponse;
+  }
+
+  Future<MyResponse> getAllCards() async {
+    // Dio dio = Dio();
+    MyResponse myResponse = MyResponse(error: "");
+    try {
+      Response response = await dio.get("${dio.options.baseUrl}/user_cards");
+      if (response.statusCode == 200) {
+        myResponse.data =
+            (response.data as List?)?.map((e) => UsersCardsModel.fromJson(e)).toList() ??
+                [];
+      }
+    } catch (err) {
+      myResponse.error = err.toString();
+    }
+    return myResponse;
   }
 }

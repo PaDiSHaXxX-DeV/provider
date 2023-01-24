@@ -1,122 +1,158 @@
 import 'package:flutter/material.dart';
-import 'package:provider_part_one/view_model/bella_view_model.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider_part_one/cubit/album_cubit.dart';
+import 'package:provider_part_one/cubit/card_state.dart';
+import 'package:provider_part_one/data/api_service/api_service.dart';
+import 'package:provider_part_one/data/repositories/My_repository_card.dart';
 
-
-class CardInfoScreen extends StatelessWidget {
-  const CardInfoScreen({Key? key}) : super(key: key);
+class UsersCardsPage extends StatelessWidget {
+  const UsersCardsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // var bellaProvider = Provider.of<BellaViewModel>(context);
-    print("REBUILDEING BUILD METHOD");
-
-    return Scaffold(
-      backgroundColor: Colors.blue,
-      appBar: AppBar(
-        title: const Text("API CALL"),
+    CardCubit cardsCubit = CardCubit(Cards_Repo(apiService: ApiService()));
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blueAccent, Colors.black],
+        ),
       ),
-      body: Column(
-        children: [
-          
-          Consumer<CardViewModel>(
-            builder: (context, cardViewModel, child) {
-              return Center(
-                child: cardViewModel.isLoading
-                    ? const CircularProgressIndicator()
-                    : (cardViewModel.userData == null
-                        ? const Text("Hozircha data juq")
-                        : Container(
-                            height: 700,
+      child: BlocProvider(
+        create: (context) => cardsCubit,
+        child: BlocBuilder<CardCubit, CardState>(
+          builder: (context, state) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+                centerTitle: true,
+                title: const Text(
+                  'Users Cards',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              body: state is LoadAlbumsInProgress
+                  ? const Center(child: CircularProgressIndicator())
+                  : state is LoadAlbumsInSuccess
+                      ? Center(
+                          child: Expanded(
                             child: ListView.builder(
                               shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemCount: cardViewModel.userData?.length ?? 1,
-                              itemBuilder: ((context, index) {
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: state.cards.length,
+                              itemBuilder: (context, index) {
                                 return Container(
-                                  margin: EdgeInsets.symmetric(vertical: 6),
-                                  height: 250,
-                                  width: 180,
+                                  margin: const EdgeInsets.only(
+                                    top: 15,
+                                    bottom: 15,
+                                    left: 20,
+                                    right: 20,
+                                  ),
+                                  padding: const EdgeInsets.all(20),
+                                  height: 200,
+                                  width: double.infinity,
                                   decoration: BoxDecoration(
                                     gradient: LinearGradient(
-                                        begin: Alignment.topRight,
-                                        end: Alignment.bottomLeft,
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
                                         colors: [
-                                          Color(hexColor(cardViewModel
-                                              .userData![index]
-                                              .colors!
-                                              .colorA!)),
-                                          Color(hexColor(cardViewModel
-                                              .userData![index]
-                                              .colors!
-                                              .colorB!)),
+                                          Color(
+                                            hexColor(state
+                                                .cards[index].colors.color_a),
+                                          ),
+                                          Color(
+                                            hexColor(state
+                                                .cards[index].colors.color_b),
+                                          ),
                                         ]),
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(12)),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(20),
-                                    child: Column(
-                                      
-                                      children: [
-                                        SizedBox(height: 12,),
-
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(cardViewModel
-                                                .userData![index].cardType
-                                                .toString(),style: TextStyle(fontSize: 16,color: Colors.white),),
-                                            Text(cardViewModel
-                                                .userData![index].cardNumber
-                                                .toString(),style: TextStyle(fontSize: 14,color: Colors.white),),
-                                            Text(cardViewModel
-                                                .userData![index].bankName
-                                                .toString(),style: TextStyle(fontSize: 16,color: Colors.white),),
-                                          ],
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            state.cards[index].card_type,
+                                            style: const TextStyle(
+                                              fontSize: 22,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          SizedBox(
+                                            width: 60,
+                                            height: 40,
+                                            child: Image.network(
+                                              state.cards[index].icon_image,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Text(
+                                        state.cards[index].bank_name,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
                                         ),
-                                        Text(cardViewModel
-                                            .userData![index].expireDate
-                                            .toString()
-                                            .replaceAll('12:18:33.933384', ''),style: TextStyle(fontSize: 14,color: Colors.white),),
-                                            SizedBox(height: 40,),
-                                        Row(
-                                          children: [
-                                            Container(
-                                                height: 100,
-                                                width: 100,
-                                                child: Image.network(
-                                                    cardViewModel
-                                                        .userData![index]
-                                                        .iconImage!)),
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                      ),
+                                      const SizedBox(height: 16),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            '${state.cards[index].money_amount}',
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          const Text(
+                                            "SO'M",
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 18),
+                                      Text(
+                                        state.cards[index].card_number,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 );
-                              }),
+                              },
                             ),
-                          )),
-              );
-            },
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          context.read<CardViewModel>().fetchAllInfo();
-        },
-        child: const Icon(Icons.download),
+                          ),
+                        )
+                      : Container(),
+            );
+          },
+        ),
       ),
     );
   }
-}
 
-hexColor(String colorhexcode) {
-  String colornew = '0xff$colorhexcode';
-  colornew = colornew.replaceAll("#", "");
-  int colorint = int.parse(colornew);
-  return colorint;
+  hexColor(String colorhexcode) {
+    String colornew = '0xff$colorhexcode';
+    colornew = colornew.replaceAll("#", "");
+    int colorint = int.parse(colornew);
+    return colorint;
+  }
 }

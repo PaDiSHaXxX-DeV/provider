@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider_part_one/cubit/album_cubit.dart';
+import 'package:provider_part_one/cubit/cards_cubit.dart';
 import 'package:provider_part_one/data/api_service/api_service.dart';
+import 'package:provider_part_one/data/repositories/My_reposForBloc.dart';
 import 'package:provider_part_one/data/repositories/My_repository_card.dart';
 import 'package:provider_part_one/ui/Card_info_screen.dart';
 
 void main() {
-  runApp(MultiBlocProvider(
+  runApp(MultiRepositoryProvider(
     providers: [
-      BlocProvider(
-          create: (contex) => CardCubit(Cards_Repo(apiService: ApiService())))
+      RepositoryProvider(
+        create: (context) => Cards_Repos(
+          apiService: ApiService(),
+        ),
+      )
     ],
-    child: MyApp(),
+    child: MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (contex) =>
+                CardCubit(Cards_Repo(apiService: ApiService()))),
+      ],
+      child: MyApp(),
+    ),
   ));
 }
+
+//     MultiBlocProvider(
+//   providers: [
+//     BlocProvider(
+//         create: (contex) => CardCubit(Cards_Repo(apiService: ApiService()))),
+//   ],
+//   child: MyApp(),
+// ));
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,6 +45,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const UsersCardsPage());
+        home: const CardInfoScreen());
   }
 }

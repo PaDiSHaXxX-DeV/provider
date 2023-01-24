@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider_part_one/data/api_service/custom_exceptions.dart';
-const String baseUrl= "https://banking-api.free.mockoapp.net..ds";
+const String baseUrl= "https://banking-api.free.mockoapp.net";
 class ApiClient{
 
   ApiClient(){

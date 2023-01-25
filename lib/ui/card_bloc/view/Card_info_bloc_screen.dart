@@ -25,90 +25,89 @@ class CardInfoScreenBloc extends StatelessWidget {
               builder: (context, state) {
                 if (state is InitialCardsState) {
                   return const Center(
-                    child: Text("Hali data yo'q"),
+                    child: Text("Hali data yo/'q"),
                   );
                 } else if (state is LoadCardsInProgress) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (state is LoadCardsInSuccess) {
-                  return Container(
-                      child: Expanded(
+                  return Expanded(
                     child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.vertical,
-                      itemCount: state.albums.length,
-                      itemBuilder: ((context, index) {
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 6),
-                          height: 250,
-                          width: 180,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                                begin: Alignment.topRight,
-                                end: Alignment.bottomLeft,
-                                colors: [
-                                  Color(
-                                      hexColor(state.albums[index].colors.color_a)),
-                                  Color(
-                                      hexColor(state.albums[index].colors.color_b)),
-                                ]),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: state.albums.length,
+                  itemBuilder: ((context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      height: 250,
+                      width: 180,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              Color(
+                                  hexColor(state.albums[index].colors.color_a)),
+                              Color(
+                                  hexColor(state.albums[index].colors.color_b)),
+                            ]),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      state.albums[index].card_type.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.white),
-                                    ),
-                                    Text(
-                                      state.albums[index].card_number.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 14, color: Colors.white),
-                                    ),
-                                    Text(
-                                      state.albums[index].bank_name.toString(),
-                                      style: const TextStyle(
-                                          fontSize: 16, color: Colors.white),
-                                    ),
-                                  ],
+                                Text(
+                                  state.albums[index].card_type.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white),
                                 ),
                                 Text(
-                                  state.albums[index].expire_date
-                                      .toString()
-                                      .replaceAll('12:18:33.933384', ''),
+                                  state.albums[index].card_number.toString(),
                                   style: const TextStyle(
                                       fontSize: 14, color: Colors.white),
                                 ),
-                                const SizedBox(
-                                  height: 40,
+                                Text(
+                                  state.albums[index].bank_name.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.white),
                                 ),
-                                Row(
-                                  children: [
-                                    Container(
-                                        height: 100,
-                                        width: 100,
-                                        child: Image.network(
-                                            state.albums[index].icon_image)),
-                                  ],
-                                )
                               ],
                             ),
-                          ),
-                        );
-                      }),
+                            Text(
+                              state.albums[index].expire_date
+                                  .toString()
+                                  .replaceAll('12:18:33.933384', ''),
+                              style: const TextStyle(
+                                  fontSize: 14, color: Colors.white),
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                    height: 100,
+                                    width: 100,
+                                    child: Image.network(
+                                        state.albums[index].icon_image)),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }),
                     ),
-                  ));
+                  );
                 } else if (state is LoadCardsInFailure) {
                   return Center(
                     child: Text(
@@ -122,7 +121,6 @@ class CardInfoScreenBloc extends StatelessWidget {
                 return true; //newState is LoadAlbumsInFailure;
               },
               listener: (context, state) {
-                print("TTTT");
                 MyUtils.getMyToast(message: "Loading in progress...");
               },
               listenWhen: (oldState, newState) {
@@ -136,8 +134,8 @@ class CardInfoScreenBloc extends StatelessWidget {
   }
 }
 
-hexColor(String colorhexcode) {
-  String colornew = '0xff$colorhexcode';
+hexColor(String color_hexcode) {
+  String colornew = '0xff$color_hexcode';
   colornew = colornew.replaceAll("#", "");
   int colorint = int.parse(colornew);
   return colorint;
